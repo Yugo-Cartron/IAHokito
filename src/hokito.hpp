@@ -1,13 +1,13 @@
 #include <iostream>
 #include <array>
 #include <random>
+#include "case.hpp"
 
 const int WIN = 1;
 const int LOST = -WIN;
 
 class Hokito {
 
-    class Case{};
     public:
         static const int WIDTH = 6;
         static const int HEIGHT = 6;
@@ -19,5 +19,6 @@ class Hokito {
     public:
         Hokito();
         int calculScore(bool couleur);
+        std::vector<int> Hokito::deplacementPossible(const int position, const int valeur, std::vector<int> deplacement) const;
 
 };
