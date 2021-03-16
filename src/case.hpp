@@ -1,11 +1,19 @@
+
+static const bool BLACK = false;
+static const bool WHITE = true;
 class Case 
 {
     private :
+        
         bool couleur;
         int valeur;
         int pile;
 
     public :
+        Case() {
+            this->couleur = BLACK;
+            this->valeur = 1;
+        }
         Case(const bool c, const int v){
             this->couleur = c;
             this->valeur = v;
