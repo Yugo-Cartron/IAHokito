@@ -1,4 +1,5 @@
 #include "hokito.hpp"
+#include "case.hpp"
 
 Hokito::Hokito() {
     int cpt[] = {PIONS_BY_TYPE, PIONS_BY_TYPE, PIONS_BY_TYPE};

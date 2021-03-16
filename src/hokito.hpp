@@ -1,5 +1,6 @@
 #include <iostream>
 #include <array>
+#include <vector>
 #include <random>
 #include "case.hpp"
 
@@ -20,5 +21,6 @@ class Hokito {
         Hokito();
         int calculScore(bool couleur);
         int whoWins();
+        std::vector<int> Hokito::deplacementPossible(const int position, const int valeur, std::vector<int> deplacement) const;
 
 };
