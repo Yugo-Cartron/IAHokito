@@ -2,5 +2,5 @@
 
 int main() {
     Hokito h = Hokito();
-    h.print();
+    h.play(Hokito::PvP);
 }

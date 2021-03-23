@@ -15,6 +15,9 @@ class Hokito {
         static const int WIDTH = 6;
         static const int HEIGHT = 6;
         static const int PIONS_BY_TYPE = 6;
+        static const int PvP = 1;
+        static const int PvIA = 2;
+        static const int IAvIA = 3;
 
     private: 
         std::array<Case, WIDTH*HEIGHT> board{};
@@ -29,8 +32,9 @@ class Hokito {
         int whoWins();
         bool is_ended() const;
         void moves(const int depart, const int arrivee);
-        std::vector<int> deplacementPossible(const int position, const int valeur, std::vector<int> deplacement) const;
+        void deplacementPossible(const int position, const int valeur, std::vector<int>* deplacement) const;
         void print() const;
+        void play(int mode);
 };
 
 #endif 

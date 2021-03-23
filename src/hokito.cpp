@@ -4,21 +4,25 @@
 using namespace std;
 
 Hokito::Hokito() {
-    int cpt[] = {PIONS_BY_TYPE, PIONS_BY_TYPE, PIONS_BY_TYPE};
+    tour = true;
+    int cptBlack[] = {PIONS_BY_TYPE, PIONS_BY_TYPE, PIONS_BY_TYPE};
     int random = 0;
     for(int i = 0; i<board.size()/2; i++) {
         random = rand() % 3 + 1;
-        if ( cpt[random] > 0) { 
+        if ( cptBlack[random-1] > 0) { 
             board[i] = Case(Case::BLACK,random);
-            cpt[random] --;
-        }
+            cptBlack[random-1] --;
+        } else 
+            i--;
     }
+    int cptWhite[] = {PIONS_BY_TYPE, PIONS_BY_TYPE, PIONS_BY_TYPE};
     for(int i = board.size()/2; i<board.size(); i++) {
-        random = rand() % 3;
-        if ( cpt[random] > 0) { 
+        random = rand() % 3 + 1;
+        if ( cptWhite[random-1] > 0) { 
             board[i] = Case(Case::WHITE,random);
-            cpt[random] --;
-        }
+            cptWhite[random-1] --;
+        } else 
+            i--;
     }
 }
 
@@ -49,37 +53,35 @@ int Hokito::whoWins() {
         return -1;
 }
 
-vector<int> Hokito::deplacementPossible(const int position, const int valeur, vector<int> deplacement) const {
-    if (board[position].getValeur() == 1){
-        //on regarde si les différentes possibilités sont égales à 1 ou -1 quand on les fait modulo la largeur et qu'on les soustraient à la position
-        //(on fait +1 à chaque position pour commencer le tableau à 1)
-        if (((position-1+1 % WIDTH) - (position+1 % WIDTH)) == -1 || ((position-1+1 % WIDTH) - (position+1 % WIDTH)) == 1) {
-            deplacement.push_back(position-1);
-        }        
-        if (((position+1+1 % WIDTH) - (position+1 % WIDTH)) == -1 || ((position+1+1 % WIDTH) - (position+1 % WIDTH)) == 1) {
-            deplacement.push_back(position+1);
-        }        
-        if (position-WIDTH > 0) {
-            deplacement.push_back(position-WIDTH);
-        }        
-        if (position+WIDTH < WIDTH*HEIGHT) {
-            deplacement.push_back(position+WIDTH);
+void Hokito::deplacementPossible(const int position, const int valeur, vector<int>* deplacement) const {
+    if(valeur == 1){
+        if( position >= WIDTH ) {
+            //cout << position-WIDTH<< " " << endl;
+            deplacement->push_back(position-WIDTH);
         }
-        return deplacement;
+            
+        if (position < HEIGHT*(WIDTH-1)) {
+            //cout << position+WIDTH<< " " << endl;
+            deplacement->push_back(position+WIDTH);
+        }
+        if (position % WIDTH != 0) {
+            //cout << position-1<< " " << endl;
+            deplacement->push_back(position-1);
+        }
+        if (position % WIDTH != 5){
+            //cout << position+1<< " " << endl;
+            deplacement->push_back(position+1);
+        }
     }
-    else if (board[position].getValeur() == 2 || board[position].getValeur() == 3){
-        if (((position-1+1 % WIDTH) - (position+1 % WIDTH)) == -1 || ((position-1+1 % WIDTH) - (position+1 % WIDTH)) == 1) {
-            this->deplacementPossible(position-1, valeur -1, deplacement);
-        }
-        if (((position+1+1 % WIDTH) - (position+1 % WIDTH)) == -1 || ((position+1+1 % WIDTH) - (position+1 % WIDTH)) == 1) {
-            this->deplacementPossible(position+1, valeur -1, deplacement);
-        }
-        if (position-WIDTH > 0) {
-            this->deplacementPossible(position-WIDTH, valeur -1, deplacement);
-        }
-        if (position+WIDTH < WIDTH*HEIGHT) {
-            this->deplacementPossible(position+WIDTH, valeur -1, deplacement);
-        }
+    if(valeur == 2 || valeur == 3) {
+        if( position >= WIDTH ) 
+            deplacementPossible(position - WIDTH, valeur - 1, deplacement);
+        if (position < HEIGHT*(WIDTH-1)) 
+            deplacementPossible(position + WIDTH, valeur - 1, deplacement);
+        if (position % WIDTH != 0) 
+            deplacementPossible(position - 1, valeur - 1, deplacement);
+        if (position % WIDTH != 5)
+            deplacementPossible(position + 1, valeur - 1, deplacement);
     }
 }
 
@@ -152,60 +154,89 @@ void Hokito::print() const {
 
 bool Hokito::is_ended() const {
     for(int i=0; i<board.size(); i++){
-        std::vector<int> dep;
-        this->deplacementPossible(i, board[i].getValeur(), dep);
-        while(dep.size() > 0){
-            if(!case_free(dep.at(dep.size()-1))){
-                return false;
-            }
+        if(!case_free(i)){   
+            std::vector<int> dep;    
+            deplacementPossible(i, board[i].getValeur(), &dep);
+            cout << dep.size() << endl;
+            while(dep.size() > 0){
+                cout << dep.back() << endl;
+                if(!case_free(dep.back())){
+                    return false;
+                }
             dep.pop_back();
+            } 
         }
     }return true;
 }
 
 void Hokito::moves(const int depart, const int arrivee){
-    if(tour == 1){
-        if(board[depart].getCouleur() != Case::WHITE){
-            std::cout << "Ce pion n'est pas à vous" << std::endl;
-        }
-        std::vector<int> tmp;
-        deplacementPossible(depart, board[depart].getValeur(), tmp);
-        bool valide =0;
-        while(tmp.size() > 0){
-            if(tmp.at(tmp.size()-1) == arrivee){
-                valide =1;
-                break;
+    board[arrivee].setPile(board[arrivee].getPile()+1);
+    board[arrivee].setCouleur(board[depart].getCouleur());
+    board[arrivee].setValeur(board[depart].getValeur());
+    board[depart].setPile(0);
+    tour = !tour;
+}
+
+void Hokito::play(int mode) {
+    int depart_ligne = 0;
+    int depart_colonne = 0;
+    int arrivee_ligne = 0;
+    int arrivee_colonne = 0;
+    int coul = Case::BLACK;
+    if (mode == Hokito::PvP) {
+        while(!is_ended()) {
+            if(tour){
+                coul = Case::WHITE;
             }
-            tmp.pop_back();
-        }
-        if(!valide){
-            std::cout << "Vous ne pouvez pas aller là" << std::endl;
-        }
-        board[arrivee].setPile(board[arrivee].getPile()+1);
-        board[arrivee].setCouleur(board[depart].getCouleur());
-        board[depart].setPile(0);
-        tour = -tour;
+            print();
+            cout << "C'est le tour des ";
+            if(tour)
+                cout << "[blancs]." << endl;
+            else {
+                cout << "(noirs)." << endl;
+            }
+
+            int position, arrivee;
+
+            bool valide = false;
+            while(!valide) {
+                cout << "Quel pion voulez-vous bouger ?" << endl;
+                cout << "Quel colonne ? " << endl;
+                cin >> depart_colonne;
+                cout << "Quel ligne ?" << endl;
+                cin >> depart_ligne;
+                cout << "Où voulez-vous le déplacer ?" << endl;
+                cout << "Quel colonne ? " << endl;
+                cin >> arrivee_colonne;
+                cout << "Quel ligne ?" << endl;
+                cin >> arrivee_ligne;
+
+                position = depart_ligne*WIDTH + depart_colonne;
+                arrivee = arrivee_ligne*WIDTH + arrivee_colonne;
+
+                if(board[position].getCouleur() != coul){
+                    std::cout << "Ce pion n'est pas à vous" << std::endl;
+                }
+
+                std::vector<int> tmp;
+                deplacementPossible(position, board[position].getValeur(), &tmp);
+                
+                while(tmp.size() > 0){
+                    if(tmp.at(tmp.size()-1) == arrivee && !case_free(arrivee)){
+                        valide = true;
+                        break;
+                    }
+                    tmp.pop_back();
+                }
+                if(!valide){
+                    std::cout << "Vous ne pouvez pas aller là." << std::endl;
+                }
+            }
+
+            moves(position, arrivee);
+        }     
     }
-    if(tour == -1){
-        if(board[depart].getCouleur() != Case::BLACK){
-            std::cout << "Ce pion n'est pas à vous" << std::endl;
-        }
-        std::vector<int> tmp;
-        deplacementPossible(depart, board[depart].getValeur(), tmp);
-        bool valide =0;
-        while(tmp.size() > 0){
-            if(tmp.at(tmp.size()-1) == arrivee){
-                valide =1;
-                break;
-            }
-            tmp.pop_back();
-        }
-        if(!valide){
-            std::cout << "Vous ne pouvez pas aller là" << std::endl;
-        }
-        board[arrivee].setPile(board[arrivee].getPile()+1);
-        board[arrivee].setCouleur(board[depart].getCouleur());
-        board[depart].setPile(0);
-        tour = -tour;
+    else {
+        cout << "Mode inconnu." << endl;
     }
 }
