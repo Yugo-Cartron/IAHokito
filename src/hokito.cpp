@@ -118,29 +118,94 @@ void Hokito::print() const {
         if(i % WIDTH == 0 && i != (board.size() - 1))
             cout << endl << "+-------+-------+-------+-------+-------+-------+" << endl << "|";
         c = board[i];
-        if (c.getCouleur()) { //If c WHITE
-            cout << " [";
-            if(c.getValeur() == 1) {
-                cout << "-," << c.getPile();
-            } else {
-                if(c.getValeur() == 2)
-                    cout << "=," << c.getPile();
-                else
-                    cout << "≡," << c.getPile();
+        if (c.getPile() == 0) 
+            cout << "       |";
+        else {
+            if (c.getCouleur()) { //If c WHITE
+                cout << " [";
+                if(c.getValeur() == 1) {
+                    cout << "-," << c.getPile();
+                } else {
+                    if(c.getValeur() == 2)
+                        cout << "=," << c.getPile();
+                    else
+                        cout << "≡," << c.getPile();
+                }
+                cout << "] |";
+            } else { //If c BLACK
+                cout << " (";
+                if(c.getValeur() == 1) {
+                    cout << "-," << c.getPile();
+                } else {
+                    if(c.getValeur() == 2)
+                        cout << "=," << c.getPile();
+                    else
+                        cout << "≡," << c.getPile();
+                }
+                cout << ") |";
             }
-            cout << "] |";
-        } else { //If c BLACK
-            cout << " (";
-            if(c.getValeur() == 1) {
-                cout << "-," << c.getPile();
-            } else {
-                if(c.getValeur() == 2)
-                    cout << "=," << c.getPile();
-                else
-                    cout << "≡," << c.getPile();
-            }
-            cout << ") |";
         }
+        
     }
     cout << endl << "+-------+-------+-------+-------+-------+-------+" << endl;
+}
+
+bool Hokito::is_ended() const {
+    for(int i=0; i<board.size(); i++){
+        std::vector<int> dep;
+        this->deplacementPossible(i, board[i].getValeur(), dep);
+        while(dep.size() > 0){
+            if(!case_free(dep.at(dep.size()-1))){
+                return false;
+            }
+            dep.pop_back();
+        }
+    }return true;
+}
+
+void Hokito::moves(const int depart, const int arrivee){
+    if(tour == 1){
+        if(board[depart].getCouleur() != Case::WHITE){
+            std::cout << "Ce pion n'est pas à vous" << std::endl;
+        }
+        std::vector<int> tmp;
+        deplacementPossible(depart, board[depart].getValeur(), tmp);
+        bool valide =0;
+        while(tmp.size() > 0){
+            if(tmp.at(tmp.size()-1) == arrivee){
+                valide =1;
+                break;
+            }
+            tmp.pop_back();
+        }
+        if(!valide){
+            std::cout << "Vous ne pouvez pas aller là" << std::endl;
+        }
+        board[arrivee].setPile(board[arrivee].getPile()+1);
+        board[arrivee].setCouleur(board[depart].getCouleur());
+        board[depart].setPile(0);
+        tour = -tour;
+    }
+    if(tour == -1){
+        if(board[depart].getCouleur() != Case::BLACK){
+            std::cout << "Ce pion n'est pas à vous" << std::endl;
+        }
+        std::vector<int> tmp;
+        deplacementPossible(depart, board[depart].getValeur(), tmp);
+        bool valide =0;
+        while(tmp.size() > 0){
+            if(tmp.at(tmp.size()-1) == arrivee){
+                valide =1;
+                break;
+            }
+            tmp.pop_back();
+        }
+        if(!valide){
+            std::cout << "Vous ne pouvez pas aller là" << std::endl;
+        }
+        board[arrivee].setPile(board[arrivee].getPile()+1);
+        board[arrivee].setCouleur(board[depart].getCouleur());
+        board[depart].setPile(0);
+        tour = -tour;
+    }
 }

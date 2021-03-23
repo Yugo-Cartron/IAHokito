@@ -18,11 +18,17 @@ class Hokito {
 
     private: 
         std::array<Case, WIDTH*HEIGHT> board{};
+        bool tour;
 
     public:
         Hokito();
+        inline bool case_free(const int position) const {
+            return board[position].getPile() == 0;
+        };
         int calculScore(bool couleur);
         int whoWins();
+        bool is_ended() const;
+        void moves(const int depart, const int arrivee);
         std::vector<int> deplacementPossible(const int position, const int valeur, std::vector<int> deplacement) const;
         void print() const;
 
