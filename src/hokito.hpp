@@ -31,7 +31,6 @@ class Hokito {
         void moves(const int depart, const int arrivee);
         std::vector<int> deplacementPossible(const int position, const int valeur, std::vector<int> deplacement) const;
         void print() const;
-
 };
 
 #endif 
