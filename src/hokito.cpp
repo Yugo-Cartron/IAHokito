@@ -294,6 +294,21 @@ void Hokito::moves(const int depart, const int arrivee){
     tour = !tour;
 }
 
+void Hokito::movesIA(const int coul) {
+    int position = rand() % 36;
+    while(case_free(position) || board[position].getCouleur() != coul ){
+        position = rand() % 36;
+    }
+    std::vector<int> dep;
+    deplacementPossibleReel(position, board[position].getValeur(), &dep);
+    
+    int arrivee = rand() % dep.size();
+    cout << "ind : " << arrivee << endl;
+    arrivee = dep.at(arrivee);
+    cout << "arrivee : " << arrivee << endl;
+    moves(position,arrivee);
+}
+
 void Hokito::play(int mode) {
     int depart_ligne = 0;
     int depart_colonne = 0;
@@ -356,6 +371,67 @@ void Hokito::play(int mode) {
                 }
             }
             moves(position, arrivee);
+        }
+    }
+    if (mode == Hokito::PvIA) {
+        while(!is_ended()) {
+            if(tour){
+                coul = Case::WHITE;
+            }
+            else {
+                coul = Case::BLACK;
+            }
+            print();
+            cout << "C'est le tour des ";
+            if(tour)
+                cout << "[blancs]." << endl;
+            else {
+                cout << "(noirs)." << endl;
+            }
+            if(tour){
+                int position, arrivee;
+
+                bool valide = false;
+                bool wrong_coul = false;
+                while(!valide || wrong_coul) {
+                    cout << "Quel pion voulez-vous bouger ?" << endl;
+                    cout << "Quel colonne ? ";
+                    cin >> depart_colonne;
+                    cout << "Quel ligne ? ";
+                    cin >> depart_ligne;
+                    cout << "Où voulez-vous le déplacer ?" << endl;
+                    cout << "Quel colonne ? ";
+                    cin >> arrivee_colonne;
+                    cout << "Quel ligne ? " ;
+                    cin >> arrivee_ligne;
+
+                    position = depart_ligne*WIDTH + depart_colonne;
+                    arrivee = arrivee_ligne*WIDTH + arrivee_colonne;
+
+                    if(board[position].getCouleur() != coul){
+                        std::cout << "Ce pion n'est pas à vous" << std::endl;
+                        wrong_coul = true;
+                    }
+
+                    std::vector<int> tmp;
+                    deplacementPossibleReel(position, board[position].getValeur(), &tmp);
+                    
+                    while(tmp.size() > 0){
+                        cout << tmp.at(tmp.size()-1) << endl;
+                        if(tmp.at(tmp.size()-1) == arrivee && !case_free(arrivee)){
+                            valide = true;
+                            break;
+                        }
+                        tmp.pop_back();
+                    }
+                    if(!valide && !wrong_coul){
+                        std::cout << "Vous ne pouvez pas aller là." << std::endl;
+                    }
+                }
+                moves(position, arrivee);
+            }
+            else
+                movesIA(Case::BLACK);
         }
     }
     else {

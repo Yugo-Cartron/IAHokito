@@ -2,5 +2,8 @@
 
 int main() {
     Hokito h = Hokito();
-    h.play(Hokito::PvP);
+    int mode;
+    cout << "Quel mode voulez-vous jouer ? (PvP : 1, PvIA : 2, IAvIA : 3) ";
+    cin >> mode;
+    h.play(mode);
 }
