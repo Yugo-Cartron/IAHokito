@@ -1,3 +1,4 @@
+#include <time.h>
 #include "hokito.hpp"
 #include "case.hpp"
 
@@ -7,6 +8,7 @@ Hokito::Hokito() {
     tour = true;
     int cptBlack[] = {PIONS_BY_TYPE, PIONS_BY_TYPE, PIONS_BY_TYPE};
     int random = 0;
+    srand(time(NULL));
     for(int i = 0; i<board.size()/2; i++) {
         random = rand() % 3 + 1;
         if ( cptBlack[random-1] > 0) { 
