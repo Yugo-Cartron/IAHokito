@@ -390,7 +390,7 @@ void Hokito::play(int mode) {
             if(tour)
                 cout << "[blancs]." << endl;
             else {
-                cout << "(noirs)." << endl;
+                cout << "<noirs>." << endl;
             }
             if(tour){
                 int position, arrivee;
