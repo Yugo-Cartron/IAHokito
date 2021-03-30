@@ -432,6 +432,28 @@ void Hokito::play(int mode) {
                 movesIA(Case::BLACK);
         }
     }
+    if (mode == Hokito::IAvIA) {
+        while(!noMoreMoves(coul)) {
+            if(tour){
+                coul = Case::WHITE;
+            }
+            else {
+                coul = Case::BLACK;
+            }
+            print();
+            cout << "C'est le tour des ";
+            if(tour)
+                cout << "[blancs]." << endl;
+            else {
+                cout << "<noirs>." << endl;
+            }
+            if(tour){
+                movesIA(Case::WHITE);
+            }
+            else
+                movesIA(Case::BLACK);
+        }
+    }
     else {
         cout << "Mode inconnu." << endl;
     }
