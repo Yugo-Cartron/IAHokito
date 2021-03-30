@@ -109,6 +109,8 @@ void Hokito::deplacementPossible(const int position, const int valeur, vector<in
 
 */
 
+/* %aybe mettre des <> ou /\ */
+
 void Hokito::print() const {
     cout << "(black) | [white]" << endl;
     cout << "- : 1 case" << endl;
