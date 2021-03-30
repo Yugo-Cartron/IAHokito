@@ -30,7 +30,7 @@ class Hokito {
         };
         int calculScore(bool couleur);
         int whoWins();
-        bool is_ended() const;
+        bool noMoreMoves(bool couleur) const;
         void moves(const int depart, const int arrivee);
         void movesIA(const int coul);
         void deplacementPossible(const int position, const int valeur, std::vector<int>* deplacement) const;
