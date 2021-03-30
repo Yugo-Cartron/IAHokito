@@ -90,7 +90,6 @@ void Hokito::deplacementPossible(const int position, const int valeur, vector<in
 void Hokito::deplacementPossibleReel(const int position, const int valeur, vector<int>* deplacement) const {
     if(valeur == 1){
         if( position >= WIDTH) {
-            //cout << position-WIDTH<< " " << endl;
             int where = WIDTH;
             bool ok = true;
             while(case_free(position - where)){
@@ -100,12 +99,10 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
                 }
                 where = where + WIDTH;
             } if (ok){
-                cout << "haut, ok : " << position-where << endl;
                 deplacement->push_back(position-where);
             }
         }
         if (position < HEIGHT*(WIDTH-1)) {
-            //cout << position+WIDTH<< " " << endl;
             int where = WIDTH;
             bool ok = true;
             while(case_free(position + where)){
@@ -115,12 +112,10 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
                 }
                 where = where + WIDTH;
             } if (ok){
-                cout << "bas, ok : " << position+where << endl;
                 deplacement->push_back(position+where);
             }
         }
         if (position % WIDTH != 0) {
-            //cout << position-1<< " " << endl;
             int where = 1;
             bool ok = true;
             while(case_free(position - where)){
@@ -130,12 +125,10 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
                 }
                 where = where + 1;
             } if (ok){
-                cout << "gauche, ok : " << position-where << endl;
                 deplacement->push_back(position-where);
             }
         }
         if (position % WIDTH != 5){
-            //cout << position+1<< " " << endl;
             int where = 1;
             bool ok = true;
             while(case_free(position + where)){
@@ -145,7 +138,6 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
                 }
                 where = where + 1;
             } if (ok){
-                cout << "droite, ok : " << position+where << endl;
                 deplacement->push_back(position+where);
             }
         }
@@ -294,7 +286,7 @@ bool Hokito::noMoreMoves(bool couleur) const {
 }
 
 void Hokito::moves(const int depart, const int arrivee){
-    board[arrivee].setPile(board[arrivee].getPile()+1);
+    board[arrivee].setPile(board[arrivee].getPile()+board[depart].getPile());
     board[arrivee].setCouleur(board[depart].getCouleur());
     board[arrivee].setValeur(board[depart].getValeur());
     board[depart].setPile(0);
@@ -306,9 +298,9 @@ void Hokito::play(int mode) {
     int depart_colonne = 0;
     int arrivee_ligne = 0;
     int arrivee_colonne = 0;
-    int coul = Case::BLACK;
+    int coul = Case::WHITE;
     if (mode == Hokito::PvP) {
-        while(!is_ended()) {
+        while(!noMoreMoves(coul)) {
             if(tour){
                 coul = Case::WHITE;
             }
