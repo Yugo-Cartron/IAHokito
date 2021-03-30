@@ -233,7 +233,7 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
 /* %aybe mettre des <> ou /\ */
 
 void Hokito::print() const {
-    cout << "(black) | [white]" << endl;
+    cout << "<black> | [white]" << endl;
     cout << "- : 1 case" << endl;
     cout << "= : 2 cases" << endl;
     cout << "≡ : 3 cases" << endl;
@@ -262,7 +262,7 @@ void Hokito::print() const {
                 }
                 cout << "] |";
             } else { //If c BLACK
-                cout << " (";
+                cout << " <";
                 if(c.getValeur() == 1) {
                     cout << "-," << c.getPile();
                 } else {
@@ -271,23 +271,23 @@ void Hokito::print() const {
                     else
                         cout << "≡," << c.getPile();
                 }
-                cout << ") |";
+                cout << "> |";
             }
         }
     }
     cout << endl << "   +-------+-------+-------+-------+-------+-------+" << endl;
 }
 
-bool Hokito::is_ended() const {
+/**
+ * Renvoie true si le joueur n'a plus de déplacement possible
+ */
+bool Hokito::noMoreMoves(bool couleur) const {
     for(int i=0; i<board.size(); i++){
-        if(!case_free(i)){   
+        if(!case_free(i) && board[i].getCouleur() == couleur){   
             std::vector<int> dep;    
             deplacementPossible(i, board[i].getValeur(), &dep);
-            while(dep.size() > 0){
-                if(!case_free(dep.back())){
-                    return false;
-                }
-            dep.pop_back();
+            if(dep.size() > 0){
+                return false;
             } 
         }
     }return true;
@@ -320,7 +320,7 @@ void Hokito::play(int mode) {
             if(tour)
                 cout << "[blancs]." << endl;
             else {
-                cout << "(noirs)." << endl;
+                cout << "<noirs>." << endl;
             }
 
             int position, arrivee;
