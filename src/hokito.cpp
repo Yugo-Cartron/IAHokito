@@ -98,6 +98,7 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
                 }
                 where = where + WIDTH;
             } if (ok){
+                cout << "haut, ok : " << position-where << endl;
                 deplacement->push_back(position-where);
             }
         }
@@ -105,13 +106,14 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
             //cout << position+WIDTH<< " " << endl;
             int where = WIDTH;
             bool ok = true;
-            while(case_free(position - where)){
-                if (position - where > WIDTH*HEIGHT-1) {
+            while(case_free(position + where)){
+                if (position + where > WIDTH*HEIGHT-1) {
                     ok = false;
                     break;
                 }
                 where = where + WIDTH;
             } if (ok){
+                cout << "bas, ok : " << position+where << endl;
                 deplacement->push_back(position+where);
             }
         }
@@ -120,13 +122,13 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
             int where = 1;
             bool ok = true;
             while(case_free(position - where)){
-                /*TODO
-                /*if (position - where < 0) {
+                if ((position - where)%6 == 1) {
                     ok = false;
                     break;
-                }*/
-                where = where + WIDTH;
+                }
+                where = where + 1;
             } if (ok){
+                cout << "gauche, ok : " << position-where << endl;
                 deplacement->push_back(position-where);
             }
         }
@@ -134,76 +136,70 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
             //cout << position+1<< " " << endl;
             int where = 1;
             bool ok = true;
-            while(case_free(position - where)){
-                /*TODO
-                /*if (position - where < 0) {
+            while(case_free(position + where)){
+                if ((position + where)%6 == 5) {
                     ok = false;
                     break;
-                }*/
-                where = where + WIDTH;
+                }
+                where = where + 1;
             } if (ok){
+                cout << "droite, ok : " << position+where << endl;
                 deplacement->push_back(position+where);
             }
         }
     }
     if(valeur == 2 || valeur == 3) {
         if( position >= WIDTH){
-            // int where = WIDTH;
-            // bool ok = true;
-            // while(case_free(position - where)){
-            //     if (position - where < 0) {
-            //         ok = false;
-            //         break;
-            //     }
-            //     where = where + WIDTH;
-            // } if (ok){
-            //     deplacementPossibleReel(position - where, valeur - 1, deplacement);
-            // }
-            deplacementPossibleReel(position - WIDTH, valeur - 1, deplacement);
+            int where = WIDTH;
+            bool ok = true;
+            while(case_free(position - where)){
+                if (position - where < 0) {
+                    ok = false;
+                    break;
+                }
+                where = where + WIDTH;
+            } if (ok){
+                deplacementPossibleReel(position - where, valeur - 1, deplacement);
+            }
         }
         if (position < HEIGHT*(WIDTH-1) && !case_free(position)) {
-            // int where = WIDTH;
-            // bool ok = true;
-            // while(case_free(position + where)){
-            //     if (position - where > WIDTH*HEIGHT-1) {
-            //         ok = false;
-            //         break;
-            //     }
-            //     where = where + WIDTH;
-            // } if (ok){
-            //     deplacementPossibleReel(position + where, valeur - 1, deplacement);
-            // }
-            deplacementPossibleReel(position + WIDTH, valeur - 1, deplacement);
+            int where = WIDTH;
+            bool ok = true;
+            while(case_free(position + where)){
+                if (position + where > WIDTH*HEIGHT-1) {
+                    ok = false;
+                    break;
+                }
+                where = where + WIDTH;
+            } if (ok){
+                deplacementPossibleReel(position + where, valeur - 1, deplacement);
+            }
         }
         if (position % WIDTH != 0 && !case_free(position)) {
-            // int where = 1;
-            // bool ok = true;
-            // while(case_free(position + where)){
-            //     /*TODO
-            //     /*if (position - where < 0) {
-            //         ok = false;
-            //         break;
-            //     }*/
-            //     where = where + 1;
-            // } if (ok){
-            //     deplacementPossibleReel(position - where, valeur - 1, deplacement);
-            // }
-            deplacementPossibleReel(position - 1, valeur - 1, deplacement);
+            int where = 1;
+            bool ok = true;
+            while(case_free(position - where)){
+                if ((position - where)%6 == 0) {
+                    ok = false;
+                    break;
+                }
+                where = where + 1;
+            } if (ok){
+                deplacementPossibleReel(position - where, valeur - 1, deplacement);
+            }
         }
         if (position % WIDTH != 5 && !case_free(position)){
-            // int where = 1;
-            // bool ok = true;
-            // while(case_free(position + where)){
-            //     /*TODO
-            //     /*if (position - where < 0) {
-            //         ok = false;
-            //         break;
-            //     }*/
-            //     where = where + 1;
-            // } if (ok){
-            //     deplacementPossibleReel(position + where, valeur - 1, deplacement);
-            // }
-            deplacementPossibleReel(position + 1, valeur - 1, deplacement);
+            int where = 1;
+            bool ok = true;
+            while(case_free(position + where)){
+                if ((position - where)%6 == 5) {
+                    ok = false;
+                    break;
+                }
+                where = where + 1;
+            } if (ok){
+                deplacementPossibleReel(position + where, valeur - 1, deplacement);
+            }
         }
     }
 }
@@ -351,6 +347,7 @@ void Hokito::play(int mode) {
                 deplacementPossibleReel(position, board[position].getValeur(), &tmp);
                 
                 while(tmp.size() > 0){
+                    cout << tmp.at(tmp.size()-1) << endl;
                     if(tmp.at(tmp.size()-1) == arrivee && !case_free(arrivee)){
                         valide = true;
                         break;
