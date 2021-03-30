@@ -29,7 +29,7 @@ class Case
         inline void setCouleur(const bool c) { this->couleur = c;}
         inline void setValeur(const int v) { this->valeur = v;}
         inline void setPile(const int p) { this->pile =p;}
-        inline bool isPile() const {return this->pile != 1;}
+        inline bool isPile() const {return this->pile > 1;}
 };
 
 #endif

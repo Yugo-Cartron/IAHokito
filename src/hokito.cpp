@@ -98,7 +98,11 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
                     break;
                 }
                 where = where + WIDTH;
-            } if (ok && (board[position-where].isPile() == isPile )){
+            
+            } if (ok && (board[position-where].isPile() == isPile )) {
+                //Pour que le déplacement soit possible il faut que :
+                // ok : Vérifie si la case existe et n'est pas vide
+                // isPile : vérifie qu'une pile aille sur une pile 
                 deplacement->push_back(position-where);
             }
         }
@@ -225,11 +229,11 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
 /* %aybe mettre des <> ou /\ */
 
 void Hokito::print() const {
-    cout << "<black> | [white]" << endl;
+    /*cout << "<black> | [white]" << endl;
     cout << "- : 1 case" << endl;
     cout << "= : 2 cases" << endl;
     cout << "≡ : 3 cases" << endl;
-    cout << "(-,X) : X nombre de pions dans la pile" << endl;
+    cout << "(-,X) : X nombre de pions dans la pile" << endl;*/
     Case c;
     cout << endl << "       0       1       2       3       4       5    " ;
     int line =0;
@@ -352,6 +356,8 @@ void Hokito::play(int mode) {
                 if(board[position].getCouleur() != coul){
                     std::cout << "Ce pion n'est pas à vous" << std::endl;
                     wrong_coul = true;
+                } else {
+                    wrong_coul = false;
                 }
 
                 std::vector<int> tmp;
