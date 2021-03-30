@@ -87,7 +87,7 @@ void Hokito::deplacementPossible(const int position, const int valeur, vector<in
     }
 }
 
-void Hokito::deplacementPossibleReel(const int position, const int valeur, vector<int>* deplacement) const {
+void Hokito::deplacementPossibleReel(const int position, const int valeur, vector<int>* deplacement, bool isPile) const {
     if(valeur == 1){
         if( position >= WIDTH) {
             int where = WIDTH;
@@ -98,7 +98,7 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
                     break;
                 }
                 where = where + WIDTH;
-            } if (ok){
+            } if (ok && (board[position-where].isPile() == isPile )){
                 deplacement->push_back(position-where);
             }
         }
@@ -111,7 +111,7 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
                     break;
                 }
                 where = where + WIDTH;
-            } if (ok){
+            } if (ok && (board[position+where].isPile() == isPile ) ){
                 deplacement->push_back(position+where);
             }
         }
@@ -124,7 +124,7 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
                     break;
                 }
                 where = where + 1;
-            } if (ok){
+            } if (ok && (board[position-where].isPile() == isPile )){
                 deplacement->push_back(position-where);
             }
         }
@@ -137,7 +137,7 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
                     break;
                 }
                 where = where + 1;
-            } if (ok){
+            } if (ok && (board[position+where].isPile() == isPile )){
                 deplacement->push_back(position+where);
             }
         }
@@ -153,7 +153,7 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
                 }
                 where = where + WIDTH;
             } if (ok){
-                deplacementPossibleReel(position - where, valeur - 1, deplacement);
+                deplacementPossibleReel(position - where, valeur - 1, deplacement, isPile);
             }
         }
         if (position < HEIGHT*(WIDTH-1) && !case_free(position)) {
@@ -166,7 +166,7 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
                 }
                 where = where + WIDTH;
             } if (ok){
-                deplacementPossibleReel(position + where, valeur - 1, deplacement);
+                deplacementPossibleReel(position + where, valeur - 1, deplacement, isPile);
             }
         }
         if (position % WIDTH != 0 && !case_free(position)) {
@@ -179,7 +179,7 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
                 }
                 where = where + 1;
             } if (ok){
-                deplacementPossibleReel(position - where, valeur - 1, deplacement);
+                deplacementPossibleReel(position - where, valeur - 1, deplacement, isPile);
             }
         }
         if (position % WIDTH != 5 && !case_free(position)){
@@ -192,7 +192,7 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
                 }
                 where = where + 1;
             } if (ok){
-                deplacementPossibleReel(position + where, valeur - 1, deplacement);
+                deplacementPossibleReel(position + where, valeur - 1, deplacement, isPile);
             }
         }
     }
@@ -299,7 +299,7 @@ void Hokito::movesIA(const int coul) {
         position = rand() % 36;
     }
     std::vector<int> dep;
-    deplacementPossibleReel(position, board[position].getValeur(), &dep);
+    deplacementPossibleReel(position, board[position].getValeur(), &dep, board[position].isPile());
     
     int arrivee = rand() % dep.size();
     cout << "ind : " << arrivee << endl;
@@ -355,11 +355,10 @@ void Hokito::play(int mode) {
                 }
 
                 std::vector<int> tmp;
-                deplacementPossibleReel(position, board[position].getValeur(), &tmp);
+                deplacementPossibleReel(position, board[position].getValeur(), &tmp, board[position].isPile());
                 
                 while(tmp.size() > 0){
-                    cout << tmp.at(tmp.size()-1) << endl;
-                    if(tmp.at(tmp.size()-1) == arrivee && !case_free(arrivee)){
+                    if(tmp.back() == arrivee && !case_free(arrivee)){
                         valide = true;
                         break;
                     }
@@ -413,7 +412,7 @@ void Hokito::play(int mode) {
                     }
 
                     std::vector<int> tmp;
-                    deplacementPossibleReel(position, board[position].getValeur(), &tmp);
+                    deplacementPossibleReel(position, board[position].getValeur(), &tmp, board[position].isPile());
                     
                     while(tmp.size() > 0){
                         cout << tmp.at(tmp.size()-1) << endl;
