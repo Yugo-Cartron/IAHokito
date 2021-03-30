@@ -1,3 +1,4 @@
+#include <time.h>
 #include "hokito.hpp"
 #include "case.hpp"
 #include <time.h>
@@ -221,6 +222,8 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
 +-------+-------+-------+-------+-------+-------+
 
 */
+
+/* %aybe mettre des <> ou /\ */
 
 void Hokito::print() const {
     cout << "(black) | [white]" << endl;
