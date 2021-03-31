@@ -46,16 +46,23 @@ int Hokito::calculScore(bool couleur) {
 *  -1 if BLACK wins */
 int Hokito::whoWins() {
     int black_score = calculScore(Case::BLACK);
+    cout << "Score <noirs> : " << black_score << endl;
     int white_score = calculScore(Case::WHITE);
-    if(black_score == white_score) 
-        return 0;
-    if(black_score < white_score) 
-        return 1;
-    else 
-        return -1;
+    cout << "Score [blancs] : " << white_score << endl;
+    if(black_score == white_score) {
+        cout << "Egalité !" << endl;
+        return 0; 
+    } if(black_score < white_score) {
+        cout << "Victoire des [blancs] !" << endl; 
+        return 1;        
+    } else {
+        cout << "Victoire des <noirs> !" << endl;
+        return -1;        
+    }
+
 }
 
-void Hokito::deplacementPossible(const int position, const int valeur, vector<int>* deplacement) const {
+/*void Hokito::deplacementPossible(const int position, const int valeur, vector<int>* deplacement) const {
     if(valeur == 1){
         if( position >= WIDTH ) {
             //cout << position-WIDTH<< " " << endl;
@@ -85,8 +92,163 @@ void Hokito::deplacementPossible(const int position, const int valeur, vector<in
         if (position % WIDTH != 5)
             deplacementPossible(position + 1, valeur - 1, deplacement);
     }
+}*/
+
+void Hokito::deplacementPossible(int depart, vector<int>* deplacement) {
+    Case tmp = board[depart];
+    bool isPile = tmp.isPile();
+    board[depart].setPile(0);
+    recDeplacement(depart, tmp.getValeur(), isPile, deplacement);
+    board[depart] = tmp;
 }
 
+void Hokito::recDeplacement(const int position, const int valeur, const bool isPile, vector<int>* deplacement){
+    //Condition d'arrêt
+    if(valeur == 1) {
+
+        //Déplacement vers le haut
+        if(position >= WIDTH) {
+            int tmp = position;
+            bool trouve = false;
+            while( (tmp >= WIDTH) && !trouve) {
+                tmp -= WIDTH;
+                
+                //On cherche une case non vide où s'arrêter
+                if( !case_free(tmp) ){
+                    trouve = true;
+
+                    //On vérifie la compatibilité
+                    if(board[tmp].isPile() == isPile) {
+                        deplacement->push_back(tmp);
+                    }                   
+                }
+            } 
+        }
+
+        //Déplacement vers le bas
+        if(position < HEIGHT*(WIDTH-1)) {
+            int tmp = position;
+            bool trouve = false;
+            while( (tmp < HEIGHT*(WIDTH-1)) && !trouve) {
+                tmp += WIDTH;
+                
+                //On cherche une case non vide où s'arrêter
+                if( !case_free(tmp) ){
+                    trouve = true;
+
+                    //On vérifie la compatibilité
+                    if(board[tmp].isPile() == isPile) {
+                        deplacement->push_back(tmp);
+                    }                   
+                }
+            } 
+        }
+
+        //Déplacement vers la gauche
+        if(position % WIDTH != 0) {
+            int tmp = position;
+            bool trouve = false;
+            while( (tmp % WIDTH != 0) && !trouve) {
+                tmp --;
+                
+                //On cherche une case non vide où s'arrêter
+                if( !case_free(tmp) ){
+                    trouve = true;
+
+                    //On vérifie la compatibilité
+                    if(board[tmp].isPile() == isPile) {
+                        deplacement->push_back(tmp);
+                    }                   
+                }
+            } 
+        }
+
+        //Déplacement vers la droite
+        if(position % WIDTH != 5) {
+            int tmp = position;
+            bool trouve = false;
+            while( (tmp % WIDTH != 5) && !trouve) {
+                tmp ++;
+                
+                //On cherche une case non vide où s'arrêter
+                if( !case_free(tmp) ){
+                    trouve = true;
+
+                    //On vérifie la compatibilité
+                    if(board[tmp].isPile() == isPile) {
+                        deplacement->push_back(tmp);
+                    }                   
+                }
+            } 
+        }
+    }
+
+    //Récursivité
+    if( valeur == 2 || valeur == 3) {
+
+        //Déplacement vers le haut
+        if(position >= WIDTH) {
+            int tmp = position;
+            bool trouve = false;
+            while( (tmp >= WIDTH) && !trouve) {
+                tmp -= WIDTH;
+                
+                //On cherche une case non vide pour continuer
+                if( !case_free(tmp) ){
+                    trouve = true;
+                    recDeplacement(tmp, valeur - 1, isPile, deplacement);                
+                }
+            } 
+        }
+
+        //Déplacement vers le bas
+        if(position < HEIGHT*(WIDTH-1)) {
+            int tmp = position;
+            bool trouve = false;
+            while( (tmp < HEIGHT*(WIDTH-1)) && !trouve) {
+                tmp += WIDTH;
+                
+                //On cherche une case non vide pour continuer
+                if( !case_free(tmp) ){
+                    trouve = true;
+                    recDeplacement(tmp, valeur - 1, isPile, deplacement);           
+                }
+            } 
+        }
+
+        //Déplacement vers la gauche
+        if(position % WIDTH != 0) {
+            int tmp = position;
+            bool trouve = false;
+            while( (tmp % WIDTH != 0) && !trouve) {
+                tmp --;
+                
+                //On cherche une case non vide pour continuer
+                if( !case_free(tmp) ){
+                    trouve = true;
+                    recDeplacement(tmp, valeur - 1, isPile, deplacement);                  
+                }
+            } 
+        }
+
+        //Déplacement vers la droite
+        if(position % WIDTH != 5) {
+            int tmp = position;
+            bool trouve = false;
+            while( (tmp % WIDTH != 5) && !trouve) {
+                tmp ++;
+                
+                //On cherche une case non vide où s'arrêter
+                if( !case_free(tmp) ){
+                    trouve = true;
+                    recDeplacement(tmp, valeur - 1, isPile, deplacement);   
+                }
+            } 
+        }
+    }
+}
+
+/*
 void Hokito::deplacementPossibleReel(const int position, const int valeur, vector<int>* deplacement, bool isPile) const {
     if(valeur == 1){
         if( position >= WIDTH) {
@@ -200,7 +362,7 @@ void Hokito::deplacementPossibleReel(const int position, const int valeur, vecto
             }
         }
     }
-}
+} */
 
 /*
 
@@ -277,16 +439,19 @@ void Hokito::print() const {
 /**
  * Renvoie true si le joueur n'a plus de déplacement possible
  */
-bool Hokito::noMoreMoves(bool couleur) const {
+bool Hokito::noMoreMoves(bool couleur) {
     for(int i=0; i<board.size(); i++){
         if(!case_free(i) && board[i].getCouleur() == couleur){   
             std::vector<int> dep;    
-            deplacementPossible(i, board[i].getValeur(), &dep);
+            deplacementPossible(i, &dep);
             if(dep.size() > 0){
+                cout << "Il reste des mouvements possibles" << endl;
                 return false;
             } 
         }
-    }return true;
+    }
+    cout << "Plus de mouvements possibles" << endl;
+    return true;
 }
 
 void Hokito::moves(const int depart, const int arrivee){
@@ -299,14 +464,20 @@ void Hokito::moves(const int depart, const int arrivee){
 
 void Hokito::movesIA(const int coul) {
     int position = rand() % 36;
-    while(case_free(position) || board[position].getCouleur() != coul ){
-        position = rand() % 36;
-    }
     std::vector<int> dep;
-    deplacementPossibleReel(position, board[position].getValeur(), &dep, board[position].isPile());
+    //deplacementPossibleReel(position, board[position].getValeur(), &dep, board[position].isPile());
+    deplacementPossible(position, &dep);
+    while(case_free(position) || board[position].getCouleur() != coul || dep.size() == 0 ){
+        position = rand() % 36;
+        deplacementPossible(position, &dep);
+    }    
+
+    cout << "******** Départ : " << position << endl;
+    for (auto arrivee : dep) {
+        cout << arrivee << endl;
+    }
     
     int arrivee = rand() % dep.size();
-    cout << "ind : " << arrivee << endl;
     arrivee = dep.at(arrivee);
     cout << "arrivee : " << arrivee << endl;
     moves(position,arrivee);
@@ -337,41 +508,49 @@ void Hokito::play(int mode) {
             int position, arrivee;
 
             bool valide = false;
-            bool wrong_coul = false;
-            while(!valide || wrong_coul) {
+            while(!valide) {
                 cout << "Quel pion voulez-vous bouger ?" << endl;
                 cout << "Quel colonne ? ";
                 cin >> depart_colonne;
                 cout << "Quel ligne ? ";
                 cin >> depart_ligne;
-                cout << "Où voulez-vous le déplacer ?" << endl;
-                cout << "Quel colonne ? ";
-                cin >> arrivee_colonne;
-                cout << "Quel ligne ? " ;
-                cin >> arrivee_ligne;
-
                 position = depart_ligne*WIDTH + depart_colonne;
-                arrivee = arrivee_ligne*WIDTH + arrivee_colonne;
 
-                if(board[position].getCouleur() != coul){
-                    std::cout << "Ce pion n'est pas à vous" << std::endl;
-                    wrong_coul = true;
-                } else {
-                    wrong_coul = false;
-                }
-
-                std::vector<int> tmp;
-                deplacementPossibleReel(position, board[position].getValeur(), &tmp, board[position].isPile());
-                
-                while(tmp.size() > 0){
-                    if(tmp.back() == arrivee && !case_free(arrivee)){
-                        valide = true;
-                        break;
+                //Vérification de la case de départ
+                if(board[position].getCouleur() != coul || case_free(position)){
+                    if(board[position].getCouleur() != coul) {
+                        cout << "Ce pion n'est pas à vous" << endl;
+                    } else {
+                        cout << "Cette case est vide" << endl;
                     }
-                    tmp.pop_back();
-                }
-                if(!valide && !wrong_coul){
-                    std::cout << "Vous ne pouvez pas aller là." << std::endl;
+                } else {
+                    cout << "Où voulez-vous le déplacer ?" << endl;
+                    cout << "Quel colonne ? ";
+                    cin >> arrivee_colonne;
+                    cout << "Quel ligne ? " ;
+                    cin >> arrivee_ligne;
+
+                    arrivee = arrivee_ligne*WIDTH + arrivee_colonne;
+
+                    if(case_free(arrivee)){
+                        cout << "Vous ne pouvez pas vous arrêter sur une case vide" << endl;
+                    } else {
+                        std::vector<int> tmp;
+                        //deplacementPossibleReel(position, board[position].getValeur(), &tmp, board[position].isPile());
+                        deplacementPossible(position, &tmp);
+                            
+                        while(tmp.size() > 0){
+                            if(tmp.back() == arrivee){
+                                valide = true;
+                                break;
+                            } 
+                            tmp.pop_back();                            
+                        }                            
+                    }
+
+                    if(!valide){
+                        std::cout << "Vous ne pouvez pas aller là." << std::endl;
+                    }
                 }
             }
             moves(position, arrivee);
@@ -396,40 +575,49 @@ void Hokito::play(int mode) {
                 int position, arrivee;
 
                 bool valide = false;
-                bool wrong_coul = false;
-                while(!valide || wrong_coul) {
+                while(!valide) {
                     cout << "Quel pion voulez-vous bouger ?" << endl;
                     cout << "Quel colonne ? ";
                     cin >> depart_colonne;
                     cout << "Quel ligne ? ";
                     cin >> depart_ligne;
-                    cout << "Où voulez-vous le déplacer ?" << endl;
-                    cout << "Quel colonne ? ";
-                    cin >> arrivee_colonne;
-                    cout << "Quel ligne ? " ;
-                    cin >> arrivee_ligne;
-
                     position = depart_ligne*WIDTH + depart_colonne;
-                    arrivee = arrivee_ligne*WIDTH + arrivee_colonne;
 
-                    if(board[position].getCouleur() != coul){
-                        std::cout << "Ce pion n'est pas à vous" << std::endl;
-                        wrong_coul = true;
-                    }
-
-                    std::vector<int> tmp;
-                    deplacementPossibleReel(position, board[position].getValeur(), &tmp, board[position].isPile());
-                    
-                    while(tmp.size() > 0){
-                        cout << tmp.at(tmp.size()-1) << endl;
-                        if(tmp.at(tmp.size()-1) == arrivee && !case_free(arrivee)){
-                            valide = true;
-                            break;
+                    //Vérification de la case de départ
+                    if(board[position].getCouleur() != coul || case_free(position)){
+                        if(board[position].getCouleur() != coul) {
+                            cout << "Ce pion n'est pas à vous" << endl;
+                        } else {
+                            cout << "Ce case est vide" << endl;
                         }
-                        tmp.pop_back();
-                    }
-                    if(!valide && !wrong_coul){
-                        std::cout << "Vous ne pouvez pas aller là." << std::endl;
+                    } else {
+                        cout << "Où voulez-vous le déplacer ?" << endl;
+                        cout << "Quel colonne ? ";
+                        cin >> arrivee_colonne;
+                        cout << "Quel ligne ? " ;
+                        cin >> arrivee_ligne;
+
+                        arrivee = arrivee_ligne*WIDTH + arrivee_colonne;
+
+                        if(case_free(arrivee)){
+                            cout << "Vous ne pouvez pas vous arrêter sur une case vide" << endl;
+                        } else {
+                            std::vector<int> tmp;
+                            //deplacementPossibleReel(position, board[position].getValeur(), &tmp, board[position].isPile());
+                            deplacementPossible(position, &tmp);
+                            
+                            while(tmp.size() > 0){
+                                if(tmp.back() == arrivee){
+                                    valide = true;
+                                    break;
+                                } 
+                                tmp.pop_back();                            
+                            }                            
+                        }
+
+                        if(!valide){
+                            std::cout << "Vous ne pouvez pas aller là." << std::endl;
+                        }
                     }
                 }
                 moves(position, arrivee);
@@ -460,7 +648,6 @@ void Hokito::play(int mode) {
                 movesIA(Case::BLACK);
         }
     }
-    else {
-        cout << "Mode inconnu." << endl;
-    }
+    print();
+    int winner = whoWins();
 }

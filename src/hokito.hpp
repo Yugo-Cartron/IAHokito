@@ -30,10 +30,11 @@ class Hokito {
         };
         int calculScore(bool couleur);
         int whoWins();
-        bool noMoreMoves(bool couleur) const;
+        bool noMoreMoves(bool couleur);
         void moves(const int depart, const int arrivee);
         void movesIA(const int coul);
-        void deplacementPossible(const int position, const int valeur, std::vector<int>* deplacement) const;
+        void deplacementPossible(int depart, std::vector<int>* deplacement);
+        void recDeplacement(const int position, const int valeur, const bool isPile, std::vector<int>* deplacement);
         void deplacementPossibleReel(const int position, const int valeur, std::vector<int>* deplacement, bool isPile) const;
         void print() const;
         void play(int mode);
