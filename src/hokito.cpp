@@ -196,7 +196,7 @@ void Hokito::recDeplacement(const int position, const int valeur, const bool isP
                 //On cherche une case non vide pour continuer
                 if( !case_free(tmp) ){
                     trouve = true;
-                    recDeplacement(tmp, valeur - 1, isPile, deplacement);                
+                    recDeplacement(tmp, valeur - 1, isPile, deplacement);
                 }
             } 
         }
@@ -466,11 +466,14 @@ void Hokito::movesIA(const int coul) {
     int position = rand() % 36;
     std::vector<int> dep;
     //deplacementPossibleReel(position, board[position].getValeur(), &dep, board[position].isPile());
-    deplacementPossible(position, &dep);
+    if(board[position].getCouleur() == coul){
+        deplacementPossible(position, &dep);
+    }
     while(case_free(position) || board[position].getCouleur() != coul || dep.size() == 0 ){
+        cout << "autre essai" << endl;
         position = rand() % 36;
         deplacementPossible(position, &dep);
-    }    
+    }
 
     cout << "******** Départ : " << position << endl;
     for (auto arrivee : dep) {
@@ -538,7 +541,7 @@ void Hokito::play(int mode) {
                         std::vector<int> tmp;
                         //deplacementPossibleReel(position, board[position].getValeur(), &tmp, board[position].isPile());
                         deplacementPossible(position, &tmp);
-                            
+                        
                         while(tmp.size() > 0){
                             if(tmp.back() == arrivee){
                                 valide = true;
@@ -605,6 +608,10 @@ void Hokito::play(int mode) {
                             std::vector<int> tmp;
                             //deplacementPossibleReel(position, board[position].getValeur(), &tmp, board[position].isPile());
                             deplacementPossible(position, &tmp);
+
+                            for (auto arrivee : tmp) {
+                                cout << arrivee << endl;
+                            }
                             
                             while(tmp.size() > 0){
                                 if(tmp.back() == arrivee){
