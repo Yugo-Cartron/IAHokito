@@ -698,3 +698,29 @@ void Hokito::play(int mode) {
     print();
     int winner = whoWins();
 }
+
+int Hokito::current_player() const {
+    if(tour) return 1;
+    else return 0;
+}
+
+void Hokito::make_move(const Move& m) {
+    moves(m.first, m.second);
+}
+
+void Hokito::playout(mt19937& engine) {
+    while(!noMoreMoves(tour)) {
+        if(tour) movesIA(1);
+        else movesIA(0);
+    }
+}
+
+string Hokito::player_to_string(int coul) const {
+    if (coul== 1) return "[blancs]";
+    else return "<noirs>";
+}
+
+ostream& operator<<(std::ostream& os, const Hokito& hokito) {
+    hokito.print();
+    return os;
+}
