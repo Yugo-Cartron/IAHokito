@@ -706,4 +706,5 @@ string Hokito::player_to_string(int coul) const {
 
 ostream& operator<<(std::ostream& os, const Hokito& hokito) {
     hokito.print();
+    return os;
 }

@@ -10,7 +10,7 @@
 class Hokito {
  
     public:
-    using Move = pair<int, int>;
+    using Move = std::pair<int, int>;
     bool end_of_game() const;
     int current_player() const;
     void make_move(const Move& m);
