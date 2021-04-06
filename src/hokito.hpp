@@ -9,18 +9,17 @@
 
 class Hokito {
  
-// public:
-//   using Move = int;
-//   bool end_of_game() const;
-//   bool won(int player) const;
-//   int value(int player) const;
-//   int current_player() const;
-//   void make_move(const Move& m);
-//   std::vector<Move> get_moves() const;
-//   void playout(std::mt19937& engine);
-//   std::string player_to_string(int player) const;
-// };
-// std::ostream& operator<<(std::ostream& os, const votre_jeu& jeu);
+    public:
+    using Move = pair<int, int>;
+    bool end_of_game() const;
+    bool won(int player) const;
+    int value(int player) const;
+    int current_player() const;
+    void make_move(const Move& m);
+    std::vector<Move> get_moves() const;
+    void playout(std::mt19937& engine);
+    std::string player_to_string(int player) const;
+    
 
     public:
         static const int WIN = 1;
@@ -44,7 +43,7 @@ class Hokito {
         int calculScore(bool couleur) const;
         int whoWins() const;
         inline bool won(int player) const {return whoWins() == player;};
-        bool noMoreMoves(bool couleur) const;
+        bool noMoreMoves(bool couleur);
         void moves(const int depart, const int arrivee);
         void movesIA(const int coul);
         void deplacementPossible(int depart, std::vector<int>* deplacement);
@@ -53,5 +52,7 @@ class Hokito {
         void print() const;
         void play(int mode);
 };
+
+std::ostream& operator<<(std::ostream& os, const Hokito& hokito);
 
 #endif 
