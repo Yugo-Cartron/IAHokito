@@ -490,6 +490,22 @@ void Hokito::movesIA(const int coul) {
     moves(position,arrivee);
 }
 
+vector<Hokito::Move> Hokito::get_moves(){
+    vector<Hokito::Move> res;
+    for(int i=0; i<board.size(); i++){
+        vector<int> tmp;
+        if(board[i].getCouleur() == tour){
+            deplacementPossible(i, &tmp);
+        }
+        for(auto dep : tmp){
+            pair<int, int> p = pair<int, int>(i, dep);
+            if(count(res.begin(), res.end(), p) == 0)
+                res.push_back(p);
+        }
+    }
+    return res;
+}
+
 void Hokito::play(int mode) {
     int depart_ligne = 0;
     int depart_colonne = 0;

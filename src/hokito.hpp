@@ -7,7 +7,10 @@
 #include <random>
 #include "case.hpp"
 
+using namespace std;
+
 class Hokito {
+<<<<<<< HEAD
  
     public:
     using Move = std::pair<int, int>;
@@ -18,8 +21,11 @@ class Hokito {
     void playout(std::mt19937& engine);
     std::string player_to_string(int player) const;
     
+=======
+>>>>>>> 5fad02dfecaa1a11e09839e40530eabcf5320123
 
     public:
+        using Move = pair<int,int>;
         static const int WIN = 1;
         static const int LOST = -WIN;
         static const int WIDTH = 6;
@@ -30,7 +36,7 @@ class Hokito {
         static const int IAvIA = 3;
 
     private: 
-        std::array<Case, WIDTH*HEIGHT> board{};
+        array<Case, WIDTH*HEIGHT> board{};
         bool tour;
 
     public:
@@ -56,13 +62,19 @@ class Hokito {
         bool noMoreMoves(bool couleur);
         void moves(const int depart, const int arrivee);
         void movesIA(const int coul);
-        void deplacementPossible(int depart, std::vector<int>* deplacement);
-        void recDeplacement(const int position, const int valeur, const bool isPile, std::vector<int>* deplacement) const;
-        void deplacementPossibleReel(const int position, const int valeur, std::vector<int>* deplacement, bool isPile) const;
+        void deplacementPossible(int depart, vector<int>* deplacement);
+        void recDeplacement(const int position, const int valeur, const bool isPile, vector<int>* deplacement) const;
+        void deplacementPossibleReel(const int position, const int valeur, vector<int>* deplacement, bool isPile) const;
+        vector<Move> get_moves();
         void print() const;
         void play(int mode);
+        bool end_of_game() const;
+        int current_player() const;
+        void make_move(const Move& m);
+        void playout(mt19937& engine);
+        string player_to_string(int player) const;
 };
 
-std::ostream& operator<<(std::ostream& os, const Hokito& hokito);
+ostream& operator<<(ostream& os, const Hokito& hokito);
 
 #endif 
