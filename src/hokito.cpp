@@ -1,5 +1,6 @@
 #include <time.h>
 #include <algorithm>
+#include "mcts.hpp"
 #include "hokito.hpp"
 #include "case.hpp"
 
@@ -468,6 +469,7 @@ void Hokito::moves(const int depart, const int arrivee){
 }
 
 void Hokito::movesIA(const int coul) {
+    auto the_turk = make_mcts(this, 5000, 0.35, 4);
     int position = rand() % 36;
     vector<int> dep;
     //deplacementPossibleReel(position, board[position].getValeur(), &dep, board[position].isPile());
@@ -491,7 +493,7 @@ void Hokito::movesIA(const int coul) {
 }
 
 vector<Hokito::Move> Hokito::get_moves(){
-    vector<Hokito::Move> res;
+    vector<Move> res;
     for(int i=0; i<board.size(); i++){
         vector<int> tmp;
         if(board[i].getCouleur() == tour){

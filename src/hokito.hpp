@@ -10,20 +10,7 @@
 using namespace std;
 
 class Hokito {
-<<<<<<< HEAD
  
-    public:
-    using Move = std::pair<int, int>;
-    bool end_of_game() const;
-    int current_player() const;
-    void make_move(const Move& m);
-    std::vector<Move> get_moves() const;
-    void playout(std::mt19937& engine);
-    std::string player_to_string(int player) const;
-    
-=======
->>>>>>> 5fad02dfecaa1a11e09839e40530eabcf5320123
-
     public:
         using Move = pair<int,int>;
         static const int WIN = 1;
