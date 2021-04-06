@@ -12,7 +12,6 @@ class Hokito {
 // public:
 //   using Move = int;
 //   bool end_of_game() const;
-//   bool won(int player) const;
 //   int value(int player) const;
 //   int current_player() const;
 //   void make_move(const Move& m);
@@ -43,8 +42,19 @@ class Hokito {
         };
         int calculScore(bool couleur) const;
         int whoWins() const;
-        inline bool won(int player) const {return whoWins() == player;};
-        bool noMoreMoves(bool couleur) const;
+        inline bool won(int player) const {
+            if(player = 1 && whoWins() == -1)
+                return true;
+            else if (player = 0 && whoWins() == 1)
+                return true;
+            return false;};
+        inline bool value(int player) const {
+            if(player = 1)
+                return -whoWins();
+            else if (player = 0)
+                return whoWins();
+            return false;};
+        bool noMoreMoves(bool couleur);
         void moves(const int depart, const int arrivee);
         void movesIA(const int coul);
         void deplacementPossible(int depart, std::vector<int>* deplacement);

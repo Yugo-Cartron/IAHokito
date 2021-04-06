@@ -4,7 +4,6 @@
 class Case 
 {
     private :
-        
         bool couleur;
         int valeur;
         int pile;

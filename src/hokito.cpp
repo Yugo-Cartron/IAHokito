@@ -444,7 +444,7 @@ void Hokito::print() const {
 /**
  * Renvoie true si le joueur n'a plus de déplacement possible
  */
-bool Hokito::noMoreMoves(bool couleur) const {
+bool Hokito::noMoreMoves(bool couleur) {
     for(int i=0; i<board.size(); i++){
         if(!case_free(i) && board[i].getCouleur() == couleur){   
             vector<int> dep;    
