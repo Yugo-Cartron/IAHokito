@@ -29,7 +29,7 @@ Hokito::Hokito() {
     }
 }
 
-int Hokito::calculScore(bool couleur) {
+int Hokito::calculScore(bool couleur) const {
     int score = 0;
     for (int i = 0; i<board.size(); i++) {
         Case c = board[i];
@@ -45,7 +45,7 @@ int Hokito::calculScore(bool couleur) {
 /* Return 1 if WHITE wins
 *  0 if equality
 *  -1 if BLACK wins */
-int Hokito::whoWins() {
+int Hokito::whoWins() const{
     int black_score = calculScore(Case::BLACK);
     cout << "Score <noirs> : " << black_score << endl;
     int white_score = calculScore(Case::WHITE);
@@ -103,7 +103,7 @@ void Hokito::deplacementPossible(int depart, vector<int>* deplacement) {
     board[depart] = tmp;
 }
 
-void Hokito::recDeplacement(const int position, const int valeur, const bool isPile, vector<int>* deplacement){
+void Hokito::recDeplacement(const int position, const int valeur, const bool isPile, vector<int>* deplacement) const {
     //Condition d'arrêt
     if(valeur == 1) {
 
@@ -444,7 +444,7 @@ void Hokito::print() const {
 /**
  * Renvoie true si le joueur n'a plus de déplacement possible
  */
-bool Hokito::noMoreMoves(bool couleur) {
+bool Hokito::noMoreMoves(bool couleur) const {
     for(int i=0; i<board.size(); i++){
         if(!case_free(i) && board[i].getCouleur() == couleur){   
             vector<int> dep;    

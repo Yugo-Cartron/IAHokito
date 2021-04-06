@@ -8,6 +8,19 @@
 #include "case.hpp"
 
 class Hokito {
+ 
+// public:
+//   using Move = int;
+//   bool end_of_game() const;
+//   bool won(int player) const;
+//   int value(int player) const;
+//   int current_player() const;
+//   void make_move(const Move& m);
+//   std::vector<Move> get_moves() const;
+//   void playout(std::mt19937& engine);
+//   std::string player_to_string(int player) const;
+// };
+// std::ostream& operator<<(std::ostream& os, const votre_jeu& jeu);
 
     public:
         static const int WIN = 1;
@@ -28,13 +41,14 @@ class Hokito {
         inline bool case_free(const int position) const {
             return board[position].getPile() == 0;
         };
-        int calculScore(bool couleur);
-        int whoWins();
-        bool noMoreMoves(bool couleur);
+        int calculScore(bool couleur) const;
+        int whoWins() const;
+        inline bool won(int player) const {return whoWins() == player;};
+        bool noMoreMoves(bool couleur) const;
         void moves(const int depart, const int arrivee);
         void movesIA(const int coul);
         void deplacementPossible(int depart, std::vector<int>* deplacement);
-        void recDeplacement(const int position, const int valeur, const bool isPile, std::vector<int>* deplacement);
+        void recDeplacement(const int position, const int valeur, const bool isPile, std::vector<int>* deplacement) const;
         void deplacementPossibleReel(const int position, const int valeur, std::vector<int>* deplacement, bool isPile) const;
         void print() const;
         void play(int mode);
