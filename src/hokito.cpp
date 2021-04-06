@@ -703,3 +703,7 @@ string Hokito::player_to_string(int coul) const {
     if (coul== 1) return "[blancs]";
     else return "<noirs>";
 }
+
+ostream& operator<<(std::ostream& os, const Hokito& hokito) {
+    hokito.print();
+}
