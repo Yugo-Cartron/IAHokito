@@ -123,7 +123,6 @@ void node<Move>::set_moves(const std::vector<Move>& moves)
 {
   for (unsigned int i = 0; i < moves.size(); ++i)
     {
-#pragma omp atomic write
       this->moves[i] = moves[i];
     }
 }

@@ -8,6 +8,7 @@
 #include <fstream>
 #include <vector>
 #include <chrono>
+#include <random>
 
 template <typename Game>
 class mcts
@@ -17,13 +18,13 @@ class mcts
   std::chrono::milliseconds thinking_time;
   std::vector<std::mt19937> generators;
   node<Move>* root;
-  allocator memory_allocator;
+  ::allocator memory_allocator;
   const fast_log log;
   const float exploration_factor;
   const unsigned int nb_visits_before_expansion;
 
   inline node<Move>* select(Game& game, std::mt19937& generator, node<Move>* parent);
-  inline void expand(const Game& game, node<Move>* n);
+  inline void expand(Game& game, node<Move>* n);
   void think(Game game);
 
   void copy(node<Move>* n1, node<Move>* n2, int prunning = 0);
@@ -111,7 +112,7 @@ node<typename Game::Move>* mcts<Game>::select(Game& game, std::mt19937& generato
 }
 
 template <typename Game>
-void mcts<Game>::expand(const Game& game, node<Move>* n)
+void mcts<Game>::expand(Game& game, node<Move>* n)
 {
   unsigned int count = n->get_statistics().count;
   if (count >= nb_visits_before_expansion && !n->test_and_set())
