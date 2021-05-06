@@ -469,7 +469,6 @@ void Hokito::moves(const int depart, const int arrivee){
 }
 
 void Hokito::movesIA(const int coul) {
-    auto the_turk = make_mcts(this, 5000, 0.35, 4);
     int position = rand() % 36;
     vector<int> dep;
     //deplacementPossibleReel(position, board[position].getValeur(), &dep, board[position].isPile());
@@ -701,6 +700,10 @@ void Hokito::play(int mode) {
     int winner = whoWins();
 }
 
+bool Hokito::end_of_game() {
+    return noMoreMoves(tour);
+}
+
 int Hokito::current_player() const {
     if(tour) return 1;
     else return 0;
@@ -725,4 +728,10 @@ string Hokito::player_to_string(int coul) const {
 ostream& operator<<(std::ostream& os, const Hokito& hokito) {
     hokito.print();
     return os;
+}
+
+istream& operator>>(std::istream& is, pair<int, int>& p)
+{
+  is >> p.first >> p.second;
+  return is;
 }

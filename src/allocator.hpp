@@ -7,6 +7,7 @@ class allocator
   char* free_pointer;
 
 public:
+  /*  Constante de mémoire dépend de la machine */
   allocator(unsigned int size = 2000000000U);
   ~allocator();
   char* allocate(unsigned int size);

@@ -10,7 +10,6 @@
 using namespace std;
 
 class Hokito {
- 
     public:
         using Move = pair<int,int>;
         static const int WIN = 1;
@@ -55,7 +54,7 @@ class Hokito {
         vector<Move> get_moves();
         void print() const;
         void play(int mode);
-        bool end_of_game() const;
+        bool end_of_game();
         int current_player() const;
         void make_move(const Move& m);
         void playout(mt19937& engine);
@@ -63,5 +62,7 @@ class Hokito {
 };
 
 ostream& operator<<(ostream& os, const Hokito& hokito);
+istream& operator>>(std::istream& is, pair<int, int>& p);
+
 
 #endif 
