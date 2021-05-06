@@ -33,15 +33,15 @@ class Hokito {
         int calculScore(bool couleur) const;
         int whoWins() const;
         inline bool won(int player) const {
-            if(player = 1 && whoWins() == -1)
+            if(player == 1 && whoWins() == -1)
                 return true;
-            else if (player = 0 && whoWins() == 1)
+            else if (player == 0 && whoWins() == 1)
                 return true;
             return false;};
         inline bool value(int player) const {
-            if(player = 1)
+            if(player == 1)
                 return -whoWins();
-            else if (player = 0)
+            else if (player == 0)
                 return whoWins();
             return false;
         };
@@ -55,14 +55,17 @@ class Hokito {
         void print() const;
         void play(int mode);
         bool end_of_game();
-        int current_player() const;
+        int current_player();
+        inline bool value_for_current_player(){ 
+            return value(current_player());
+        };
         void make_move(const Move& m);
         void playout(mt19937& engine);
         string player_to_string(int player) const;
 };
 
 ostream& operator<<(ostream& os, const Hokito& hokito);
-istream& operator>>(std::istream& is, pair<int, int>& p);
-
+ostream& operator<<(ostream& os, const Hokito::Move& move);
+istream& operator>>(std::istream& is, Hokito::Move& m);
 
 #endif 
