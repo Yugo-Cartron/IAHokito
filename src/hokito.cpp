@@ -30,6 +30,8 @@ Hokito::Hokito() {
     }
 }
 
+
+
 int Hokito::calculScore(bool couleur) const {
     int score = 0;
     for (int i = 0; i<(int) board.size(); i++) {
@@ -339,7 +341,7 @@ vector<Hokito::Move> Hokito::get_moves(){
     vector<Move> res;
     for(int i=0; i<(int) board.size(); i++){
         vector<int> tmp;
-        if(board[i].getCouleur() == tour){
+        if(board[i].getCouleur() == tour && !case_free(i)){
             deplacementPossible(i, &tmp);
         }
         for(auto dep : tmp){
@@ -505,11 +507,7 @@ void Hokito::play(int mode) {
     print();
 }
 
-bool Hokito::end_of_game() {
-    return noMoreMoves(tour);
-}
-
-int Hokito::current_player() const {
+int Hokito::current_player() {
     if(tour) return 1;
     else return 0;
 }

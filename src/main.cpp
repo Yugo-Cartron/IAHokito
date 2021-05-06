@@ -39,7 +39,7 @@ void play(Game g)
   int human_last_move = -1, computer_last_move = -1;
   while (!g.end_of_game())
     {
-      if ((ans == "h" && g.current_player() == 0) || (ans == "c" && g.current_player() == 1))
+      if ((ans == "c" && g.current_player() == 0) || (ans == "h" && g.current_player() == 1))
         {
           human_last_move = select_move(g);
         }
